@@ -723,7 +723,7 @@ fileInput.addEventListener('change', (event) => {
     }
 });
 
-// MODIFICADO: Evento do botão de download agora chama a função de próximo passo
+
 downloadButton.addEventListener('click', () => {
     const a = document.createElement('a');
     a.href = finalFileContent;
