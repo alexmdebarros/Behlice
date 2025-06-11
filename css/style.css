@@ -198,3 +198,39 @@
     #signature a:hover {
       text-decoration: underline;
     }
+
+#module-selection-area {
+  padding: 20px;
+  display: flex;
+  flex-wrap: wrap; /* Permite que os botões quebrem a linha */
+  justify-content: center;
+  align-items: center;
+  gap: 15px; /* Espaço entre os botões */
+  border-top: 1px solid #ddd;
+}
+
+.module-button {
+  background-color: #075E54; /* Cor verde mais escura */
+  color: #ffffff;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 20px;
+  font-size: 0.95em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.1s, box-shadow 0.1s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.module-button:hover {
+  background-color: #128C7E; /* Cor verde mais clara ao passar o mouse */
+  transform: translateY(-2px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.module-button:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
