@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Behlice - Conferência Contábil Automática</title>
     <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
 
 <body>
@@ -17,7 +18,10 @@
 
         <div id="chat-window"></div>
 
-        <div id="input-area">
+        <div id="module-selection-area">
+            </div>
+
+        <div id="input-area" style="display: none;">
             <input type="file" id="file-input" accept=".txt,.csv" />
             <button id="upload-button" class="action-button">
                 <i class="fas fa-file-upload"></i> Enviar Arquivo
@@ -32,12 +36,7 @@
         </div>
     </div>
 
-    <script src="https://kit.fontawesome.com/SEU_KIT.js" crossorigin="anonymous"></script>
-    <script src="./js/modulos/CAR.js"></script>
-    <script src="./js/modulos/CAP.js"></script>
-    <script src="./js/modulos/FAT.js"></script>
-    <script src="./js/modulos/CXB.js"></script>
-    <script src="./js/modulos/EST.js"></script>
+    <script src="./js/modulos/script.js"></script>
 </body>
 
 </html>

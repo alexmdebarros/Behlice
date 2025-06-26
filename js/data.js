@@ -1,10 +1,6 @@
-const chatWindow = document.getElementById('chat-window');
-const uploadButton = document.getElementById('upload-button');
-const downloadButton = document.getElementById('download-button');
-const fileInput = document.getElementById('file-input');
-const typingStatus = document.getElementById('typing-status');
+// data.js
 
-// Frases para cada etapa do sistema
+// --- MENSAGENS (objeto "mensagens") ---
 const mensagens = {
     // --- MENSAGENS DE BOAS-VINDAS ---
     boasVindas: [
@@ -59,6 +55,7 @@ const mensagens = {
         "Fui treinado nas artes milenares do Débito-jutsu e Crédito-jutsu. Prepare-se!",
         "Pode vir quente que eu estou fervendo... de vontade de processar esses dados!"
     ],
+
     // --- MENSAGENS DE INÍCIO DE PROCESSAMENTO ---
     inicioProcessamento: [
         "Ok, arquivo na mão! Colocando meu capacete e óculos de proteção. Mergulhando nos dados!",
@@ -112,6 +109,7 @@ const mensagens = {
         "Entrando em velocidade de cruzeiro. A viagem pelo seu arquivo já começou.",
         "Certo, o diagnóstico começou. Em breve, o plano de tratamento (o arquivo de saída)."
     ],
+
     // --- MENSAGENS DE PROGRESSO ---
     progresso25: [
         "25% no papo! Já aqueci os motores e peguei o ritmo da estrada.",
@@ -125,6 +123,7 @@ const mensagens = {
         "Beleza, 25% feito. Os números estão começando a se comportar.",
         "Já foi um quarto da pizza! E essa parece ser de quatro queijos: Débito, Crédito, Histórico e Valor."
     ],
+
     progresso50: [
         "Metade do caminho! Estamos no topo da montanha-russa, agora é só descida! 🎢",
         "50% na conta! Já processei mais linhas do que a quantidade de café que você deveria tomar hoje.",
@@ -137,6 +136,7 @@ const mensagens = {
         "Relatório da metade do jogo: estamos vencendo as inconsistências de lavada!",
         "50%... Direto do túnel do tempo, ou melhor, do túnel de dados. Já vejo uma luz!"
     ],
+
     progresso75: [
         "Na reta final! 75% concluído. Já consigo sentir o cheirinho de arquivo pronto!",
         "Falta pouco! Só mais um gás e cruzamos a linha de chegada. 75% no placar. 🏁",
@@ -149,6 +149,7 @@ const mensagens = {
         "75%... Já estou até ensaiando meu discurso de vitória sobre esses números.",
         "Falta só aquele 25% que o estagiário faria em 3 dias. Eu faço em segundos. Aguarde."
     ],
+
     // --- MENSAGENS DE RESUMO (EXPANDIDAS) ---
     resumoLinhasExcluidas: [
         "🧹 Passei a porva em <b>X</b> linhas, que descansem em paz nas 'nuvens🤣'.",
@@ -162,6 +163,7 @@ const mensagens = {
         "O bouncer da porta dos dados sou eu. Barrei <b>X</b> entrada(s) que não estavam na lista.",
         "Houve uma pequena rebelião de dados, mas foi contida. <b>X</b> linha(s) foram neutralizadas."
     ],
+
     resumoContas: [
         "📊 As estrelas do rock deste lote! Estas contas não saíram da pista de dança:\n\n{listaContas}",
         "Confira o 'Top 5' das contas mais tagarelas. Elas tinham muito a dizer:\n\n{listaContas}",
@@ -174,6 +176,7 @@ const mensagens = {
         "Mapa de calor financeiro: estas áreas (contas) estiveram bem quentes:\n\n{listaContas}",
         "Análise de frequência: as contas que mais bateram ponto no seu arquivo:\n\n{listaContas}"
     ],
+
     resumoGrupo: [
         "📈 Análise de duplas: os pares Débito/Crédito que mais trabalharam juntos:\n\n{listaGrupos}",
         "Mapa de relacionamentos: os 'casais' de contas que mais movimentaram valores:\n\n{listaGrupos}",
@@ -186,6 +189,7 @@ const mensagens = {
         "A dança das contas: o saldo final de cada par que entrou no salão:\n\n{listaGrupos}",
         "Radiografia das transações: o valor total consolidado por cada tipo de lançamento (D-C):\n\n{listaGrupos}"
     ],
+
     resumoExcluidasPorGrupo: [
         "🚫 Os 'casais' que não se deram bem e foram expulsos da festa (e seus valores):\n\n{listaExcluidas}",
         "🚫 Análise de rejeição: o valor total descartado para cada combinação D/C:\n\n{listaExcluidas}",
@@ -193,6 +197,7 @@ const mensagens = {
         "🚫 As duplas que não passaram na audição. O valor que elas teriam movimentado:\n\n{listaExcluidas}",
         "🚫 Relatório de perdas: o montante que foi limado por cada tipo de par D/C:\n\n{listaExcluidas}"
     ],
+
     resumoClientes: [
         "👥 Contagem de elenco: <b>X</b> clientes únicos participaram desta operação.",
         "👥 A festa foi boa! Tivemos <b>X</b> convidados (clientes) diferentes na lista.",
@@ -200,6 +205,7 @@ const mensagens = {
         "Análise demográfica: <b>X</b> entidades únicas foram processadas.",
         "Cada um é cada um. E aqui, tivemos <b>X</b> 'cada uns' diferentes."
     ],
+
     resumoValores: [
         "💰 Saldo da operação: R$ <b>A</b> entraram na dança e R$ <b>B</b> ficaram de fora.",
         "💸 O placar final: R$ <b>A</b> (Processados) vs R$ <b>B</b> (Excluídos).",
@@ -207,6 +213,7 @@ const mensagens = {
         "Dinheiro na mesa: R$ <b>A</b>. Dinheiro na lixeira: R$ <b>B</b>. Tudo limpo e claro!",
         "O que importa: R$ <b>A</b>. O que foi descartado: R$ <b>B</b>. Simples assim."
     ],
+
     resumoMedia: [
         "📈 Qual o valor do show? Em média, cada ato (transação) custou R$ <b>C</b>.",
         "📈 Pingado ou expresso? O lançamento médio foi de R$ <b>C</b>.",
@@ -214,6 +221,7 @@ const mensagens = {
         "Se cada transação fosse um tijolo, o peso médio de cada um seria R$ <b>C</b>.",
         "Para ter uma ideia, o valor típico de cada linha processada foi de R$ <b>C</b>."
     ],
+
     resumoErros: [
         "⚠️ Opa, alerta! <b>EE</b> débito(s) e <b>FF</b> crédito(s) estão sem crachá (não achei no dicionário).",
         "⚠️ Sinal amarelo! Encontrei <b>EE</b> conta(s) de débito e <b>FF</b> de crédito perdidas no limbo do não-mapeamento.",
@@ -221,6 +229,7 @@ const mensagens = {
         "⚠️ Faltou na chamada! <b>EE</b> conta(s) de débito e <b>FF</b> de crédito não responderam 'presente!'.",
         "⚠️ Meu dicionário de contas precisa de uma atualização. Ficaram de fora: <b>EE</b> débitos e <b>FF</b> créditos."
     ],
+
     tempoExecucao: [
         "⏱️ Num piscar de olhos! Levei só <b>T</b> segundos (~<b>U</b> min) pra fazer toda a mágica.",
         "⏱️ Mais rápido que o The Flash com cafeína: <b>T</b> segundos (~<b>U</b> min).",
@@ -228,6 +237,7 @@ const mensagens = {
         "⏱️ Missão cumprida em tempo recorde: <b>T</b> segundos (~<b>U</b> min).",
         "⏱️ Em <b>T</b>s (~<b>U</b>min), fiz o que levaria horas. Pode aplaudir, eu não me importo."
     ],
+
     economia: [
         "🚀 Contabilidade de tempo: você economizou <b>E</b> segundos (~<b>F</b> min)! Use-os com sabedoria.",
         "🚀 Behlice te deu um presente: <b>F</b> minuto(s) de vida de volta. De nada!",
@@ -235,6 +245,7 @@ const mensagens = {
         "🚀 Menos tempo na planilha, mais tempo para... qualquer outra coisa! Economia de <b>F</b> min.",
         "🚀 O relógio agradece. <b>E</b> segundos que não serão gastos com cliques repetitivos."
     ],
+
     // --- MENSAGENS DE CONCLUSÃO ---
     conclusao: [
         "E... pronto! ✨ Pode pegar seu arquivo, ele saiu do forno agora, quentinho e organizado.",
@@ -258,6 +269,7 @@ const mensagens = {
         "O pacote foi entregue. Dentro dele: paz, organização e seus dados formatados.",
         "Acabou o expediente por aqui. Deixei tudo arrumado pra você. Só fazer o download."
     ],
+
     // --- MENSAGENS DE ESPERA/ARQUIVO VAZIO ---
     espera: [
         "Ué, cadê os dados? Acho que esse arquivo veio só com o cheiro.",
@@ -266,6 +278,7 @@ const mensagens = {
         "Este arquivo está mais vazio que cinema em dia de final de campeonato. Tenta de novo?",
         "Acho que você me enviou o rascunho do rascunho. Não encontrei nada para processar aqui."
     ],
+
     // --- MENSAGENS DE ERRO ---
     erroGeral: [
         "😱 Deu tilt nos meus circuitos! Algo inesperado aconteceu. Que tal um F5 e tentar de novo?",
@@ -276,10 +289,9 @@ const mensagens = {
     ]
 };
 
-const CNPJ_FIXO = "79124079000201";
 
-
-const dicionarioContas = {
+// --- DICIONÁRIO DE CONTAS (objeto "dicionarioContas") ---
+export const dicionarioContas = {
     '8802': '1.1.01.02.19', '52': '1.1.01.01.01', '75': '1.1.01.02.01', '81': '1.1.01.02.02',
     '98': '1.1.01.02.03', '106': '1.1.01.02.04', '112': '1.1.01.02.05', '129': '1.1.01.02.06',
     '6557': '1.1.01.02.07', '6541': '1.1.01.02.08', '6534': '1.1.01.02.09', '419': '1.1.01.02.10',
@@ -432,7 +444,9 @@ const dicionarioContas = {
     '6267': '4.3.02.03.01', '6311': '5.1.01.01.01'
 };
 
-const mapaClientesEstrangeiros = {
+
+// --- MAPA DE CLIENTES ESTRANGEIROS (objeto "mapaClientesEstrangeiros") ---
+export const mapaClientesEstrangeiros = {
     'DANIEL GEIBER': '1.1.02.15.02',
     'REMAQ': '1.1.02.15.03',
     'EDGAR ANTONIO CALDER': '1.1.02.15.04',
@@ -451,413 +465,3 @@ const mapaClientesEstrangeiros = {
     'COMERCIAL Y SERV VAS': '1.1.02.15.19',
     'LUMI FI LIC': '1.1.02.15.21'
 };
-
-let finalFileContent = '';
-
-function showTyping() {
-    typingStatus.textContent = "Digitando...";
-}
-function showOnline() {
-    typingStatus.textContent = "● Online";
-}
-
-function getRandom(arr) {
-    return arr[Math.floor(Math.random() * arr.length)];
-}
-
-function replacePlaceholders(template, values) {
-    let result = template;
-    if (values.X !== undefined) result = result.replace(/<b>X<\/b>/g, `<b>${values.X}</b>`);
-    if (values.A !== undefined) result = result.replace(/<b>A<\/b>/g, `<b>${values.A}</b>`);
-    if (values.B !== undefined) result = result.replace(/<b>B<\/b>/g, `<b>${values.B}</b>`);
-    if (values.C !== undefined) result = result.replace(/<b>C<\/b>/g, `<b>${values.C}</b>`);
-    if (values.EE !== undefined) result = result.replace(/<b>EE<\/b>/g, `<b>${values.EE}</b>`);
-    if (values.FF !== undefined) result = result.replace(/<b>FF<\/b>/g, `<b>${values.FF}</b>`);
-    if (values.T !== undefined) result = result.replace(/<b>T<\/b>/g, `<b>${values.T}</b>`);
-    if (values.U !== undefined) result = result.replace(/<b>U<\/b>/g, `<b>${values.U}</b>`);
-    if (values.E !== undefined) result = result.replace(/<b>E<\/b>/g, `<b>${values.E}</b>`);
-    if (values.F !== undefined) result = result.replace(/<b>F<\/b>/g, `<b>${values.F}</b>`);
-    return result;
-}
-
-function typeMessage(element, text, speed = 5) {
-    return new Promise(resolve => {
-        let i = 0;
-        element.innerHTML = "";
-        const interval = setInterval(() => {
-            if (i < text.length) {
-                element.innerHTML += text.charAt(i);
-                i++;
-                chatWindow.scrollTo({ top: chatWindow.scrollHeight, behavior: 'smooth' });
-            } else {
-                clearInterval(interval);
-                resolve();
-            }
-        }, speed);
-    });
-}
-
-async function addMessage(text, sender = 'behlice') {
-    if (sender === 'behlice') showTyping();
-
-    const messageDiv = document.createElement('div');
-    messageDiv.classList.add('message', sender);
-    const bubble = document.createElement('div');
-    bubble.classList.add('bubble');
-
-    if (sender === 'user') {
-        bubble.innerText = text.replace(/<[^>]+>/g, '');
-        messageDiv.appendChild(bubble);
-        chatWindow.appendChild(messageDiv);
-        chatWindow.scrollTo({ top: chatWindow.scrollHeight, behavior: 'smooth' });
-        showOnline();
-    } else {
-        const typingIndicator = document.createElement('div');
-        typingIndicator.classList.add('bubble', 'typing-indicator');
-        typingIndicator.innerHTML = '<span></span><span></span><span></span>';
-        messageDiv.appendChild(typingIndicator);
-        chatWindow.appendChild(messageDiv);
-        chatWindow.scrollTo({ top: chatWindow.scrollHeight, behavior: 'smooth' });
-
-        await new Promise(res => setTimeout(res, 400 + Math.random() * 400));
-
-        messageDiv.removeChild(typingIndicator);
-        messageDiv.appendChild(bubble);
-
-        const hasBold = /<b>.*<\/b>/.test(text);
-        if (hasBold) {
-            const plain = text.replace(/<\/?b>/g, '');
-            await typeMessage(bubble, plain);
-            bubble.innerHTML = text;
-        } else {
-            await typeMessage(bubble, text);
-        }
-        showOnline();
-    }
-}
-
-function createDownloadLink(content) {
-    const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
-    finalFileContent = URL.createObjectURL(blob);
-    downloadButton.style.display = 'block';
-    uploadButton.style.display = 'none';
-    uploadButton.disabled = false;
-    fileInput.value = '';
-}
-
-function parseBrazilianFloat(value) {
-    if (typeof value !== 'string') return parseFloat(value);
-    return parseFloat(value.replace(/\./g, '').replace(',', '.'));
-}
-
-function formatBrazilianNoThousand(value) {
-    return value.toFixed(2).replace('.', ',');
-}
-
-async function processFile(content) {
-    const inicioExecucao = Date.now();
-
-    let linhasExcluidas = 0;
-    let contagemContas = {};
-    let somaPorGrupo = {};
-    let excluidasPorGrupo = {};
-    let clientesDistintos = new Set();
-    let errosDeb = 0;
-    let errosCred = 0;
-
-    let outputLines = [];
-    const lines = content.split(/\r?\n/);
-    const header = lines[0].split(';').map(h => h.trim());
-    const dataLines = lines.slice(1).filter(l => l.trim() !== '');
-    const totalLines = dataLines.length;
-
-    // Mensagem de boas-vindas personalizada para o início
-    const welcomeMsg = getRandom(mensagens.inicioProcessamento);
-    await addMessage(welcomeMsg);
-    await addMessage(`Encontrei <b>${totalLines}</b> linhas para processar.`);
-
-    if (totalLines === 0) {
-        const waitMsg = getRandom(mensagens.espera);
-        await addMessage(waitMsg);
-        uploadButton.disabled = false;
-        uploadButton.innerText = "Enviar Outro Arquivo";
-        return;
-    }
-
-    const colMap = {
-        data: header.indexOf('CRL034.GE_TEMP.DATA'),
-        cdCliente: header.indexOf('CRL034.GE_TEMP.CD_CLIENTE'),
-        dnCliente: header.indexOf('CRL034.GE_TEMP.DN_CLIENTE'),
-        tpTitulo: header.indexOf('CRL034.GE_TEMP.CD_TP_TITULO'),
-        nrTitulo: header.indexOf('CRL034.GE_TEMP.NR_TITULO'),
-        serie: header.indexOf('CRL034.GE_TEMP.CD_SERIE'),
-        valor: header.indexOf('CRL034.GE_TEMP.VL_MOVIMENTO'),
-        contaCred: header.indexOf('CRL034.GE_TEMP.CD_CONTA_CRED'),
-        contaDeb: header.indexOf('CRL034.GE_TEMP.CD_CONTA_DEB'),
-        cdHistorico: header.indexOf('CRL034.GE_TEMP.CD_HISTORICO'),
-        dnHistorico: header.indexOf('CRL034.GE_TEMP.DN_HISTORICO'),
-        complemento: header.indexOf('CRL034.GE_TEMP.DN_COMPLEMENTO')
-    };
-
-    let linesProcessed = 0;
-    let nextUpdate25 = totalLines * 0.25;
-    let nextUpdate50 = totalLines * 0.50;
-    let nextUpdate75 = totalLines * 0.75;
-    let somaTotalProcessado = 0;
-    let somaTotalExcluido = 0;
-
-    for (const line of dataLines) {
-        const cols = line.split(';').map(c => c.trim());
-        if (cols.length < header.length) {
-            linhasExcluidas++;
-            continue;
-        }
-
-        let deb = cols[colMap.contaDeb];
-        let cred = cols[colMap.contaCred];
-        const tpTitulo = cols[colMap.tpTitulo];
-        const dnCliente = cols[colMap.dnCliente].toUpperCase();
-        const cdCliente = cols[colMap.cdCliente];
-        let excluirLinha = false;
-
-        if (cdCliente) clientesDistintos.add(cdCliente);
-        
-
-        if (
-            (deb === '171' && cred === '171') ||
-            (deb === '9099' && cred === '9099') ||
-            (deb === '9099' && cred === '2743') ||
-            (deb === '8802' && cred === '2743') ||
-            (deb === '2128' && tpTitulo === 12)
-        ) {
-            excluirLinha = true;
-        }
-        if (!excluirLinha) {
-            if (
-                (['106', '112', '201', '8183'].includes(deb) && cred === '7019' && tpTitulo === '3') ||
-                (['106', '112', '201', '8183'].includes(deb) && cred === '9099' && tpTitulo === '3') ||
-                (deb === '1494' && cred === '9099' && tpTitulo === '3') ||
-                (deb === '201' && cred === '9099' && tpTitulo === '3') ||
-                (deb === '2128' && cred === '9099')
-            ) {
-                cred = '171';
-            } else if (
-                (deb === '1494' && cred === '9099' && tpTitulo === '6') ||
-                (['106', '112', '201', '8183'].includes(deb) && cred === '9099' && tpTitulo === '6')
-            ) {
-                cred = '2743';
-            } else if (deb === '7019' && cred === '187') {
-                cred = '313';
-            } else if (deb === '2128' && cred === '2743') {
-                cred = '2832';
-            }
-        }
-
-        if (!excluirLinha && deb === '276') {
-            let contaEncontrada = false;
-            for (const nomeC in mapaClientesEstrangeiros) {
-                if (dnCliente.includes(nomeC)) {
-                    deb = mapaClientesEstrangeiros[nomeC];
-                    contaEncontrada = true;
-                    break;
-                }
-            }
-            if (!contaEncontrada) deb = '276';
-        }
-
-        if (excluirLinha) {
-            linhasExcluidas++;
-            const rawValor = cols[colMap.valor];
-            const parsedValor = parseBrazilianFloat(rawValor);
-            somaTotalExcluido += parsedValor;
-            const chaveEx = `${deb}-${cred}`;
-            if (!excluidasPorGrupo[chaveEx]) excluidasPorGrupo[chaveEx] = 0;
-            excluidasPorGrupo[chaveEx] += parsedValor;
-            linesProcessed++;
-        } else {
-            const data = cols[colMap.data];
-            const rawValor = cols[colMap.valor];
-            const cdHistorico = cols[colMap.cdHistorico];
-            let historicoFinal = cols[colMap.complemento] || '';
-            // Remove quebras de linha, múltiplos espaços e trim
-            historicoFinal = historicoFinal.replace(/[\r\n]+/g, ' ').replace(/\s+/g, ' ').trim();
-            if (!historicoFinal || historicoFinal === '') {
-                historicoFinal = `${cols[colMap.tpTitulo]}-${cols[colMap.nrTitulo]}-${cols[colMap.serie]}`;
-            }
-
-
-            const parsedValor = parseBrazilianFloat(rawValor);
-            somaTotalProcessado += parsedValor;
-
-            const formattedValor = formatBrazilianNoThousand(parsedValor);
-
-            const contaDebFinal = deb.includes('.')
-                ? deb
-                : (dicionarioContas[deb] || (() => { errosDeb++; return `ERRO_DEB(${deb})`; })());
-            const contaCredFinal = cred.includes('.')
-                ? cred
-                : (dicionarioContas[cred] || (() => { errosCred++; return `ERRO_CRED(${cred})`; })());
-
-            const chaveGrupo = `${deb}-${cred}`;
-            if (!somaPorGrupo[chaveGrupo]) somaPorGrupo[chaveGrupo] = 0;
-            somaPorGrupo[chaveGrupo] += parsedValor;
-
-            contagemContas[contaDebFinal] = (contagemContas[contaDebFinal] || 0) + 1;
-            contagemContas[contaCredFinal] = (contagemContas[contaCredFinal] || 0) + 1;
-
-            const linhaDebito = `||${data}|${CNPJ_FIXO}|${contaDebFinal}||${formattedValor}|D|${cdHistorico}|${historicoFinal}|`;
-            const linhaCredito = `||${data}|${CNPJ_FIXO}|${contaCredFinal}||${formattedValor}|C|${cdHistorico}|${historicoFinal}|`;
-
-            outputLines.push(linhaDebito, linhaCredito);
-            linesProcessed++;
-        }
-
-        // Atualizações de progresso
-        if (linesProcessed >= nextUpdate25 && nextUpdate25 !== null) {
-            const progMsg = getRandom(mensagens.progresso25);
-            await addMessage(progMsg);
-            nextUpdate25 = null;
-        } else if (linesProcessed >= nextUpdate50 && nextUpdate50 !== null) {
-            const progMsg = getRandom(mensagens.progresso50);
-            await addMessage(progMsg);
-            nextUpdate50 = null;
-        } else if (linesProcessed >= nextUpdate75 && nextUpdate75 !== null) {
-            const progMsg = getRandom(mensagens.progresso75);
-            await addMessage(progMsg);
-            nextUpdate75 = null;
-        }
-    }
-
-    // Resumo de linhas excluídas
-    if (linhasExcluidas > 0) {
-        let tpl = getRandom(mensagens.resumoLinhasExcluidas);
-        const msg = replacePlaceholders(tpl, { X: linhasExcluidas });
-        await addMessage(msg);
-    } else {
-        let tpl = getRandom(mensagens.resumoLinhasExcluidas);
-        const msg = replacePlaceholders(tpl, { X: 0 });
-        await addMessage(msg);
-    }
-
-    // Resumo das contas mais movimentadas (top 5)
-    const sortedContas = Object.entries(contagemContas).sort((a, b) => b[1] - a[1]);
-    if (sortedContas.length > 0) {
-        const top5 = sortedContas.slice(0, 5)
-            .map(([conta, cnt]) => `Conta <b>${conta}</b>: <b>${cnt}</b> vezes`)
-            .join('\n');
-        let tpl = getRandom(mensagens.resumoContas);
-        const msg = tpl.replace('{listaContas}', top5);
-        await addMessage(msg);
-    }
-
-    // Métricas por grupo (processadas)
-    if (Object.keys(somaPorGrupo).length > 0) {
-        const grupos = Object.keys(somaPorGrupo).sort().map(chave => {
-            const total = somaPorGrupo[chave];
-            const formatted = total.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-            const [deb, cred] = chave.split('-');
-            return `• Débito <b>${deb}</b> e Crédito <b>${cred}</b> → R$ <b>${formatted}</b>`;
-        }).join('\n');
-        let tpl = getRandom(mensagens.resumoGrupo);
-        const msg = tpl.replace('{listaGrupos}', grupos);
-        await addMessage(msg);
-    }
-
-    // Métricas das linhas excluídas por grupo
-    if (Object.keys(excluidasPorGrupo).length > 0) {
-        const exclGrp = Object.keys(excluidasPorGrupo).sort().map(chave => {
-            const totalEx = excluidasPorGrupo[chave];
-            const formattedEx = totalEx.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-            const [deb, cred] = chave.split('-');
-            return `• Excluídas: Débito <b>${deb}</b> e Crédito <b>${cred}</b> → R$ <b>${formattedEx}</b>`;
-        }).join('\n');
-        let tpl = getRandom(mensagens.resumoExcluidasPorGrupo);
-        const msg = tpl.replace('{listaExcluidas}', exclGrp);
-        await addMessage(msg);
-    }
-
-    // Quantidade de clientes distintos
-    let tplCli = getRandom(mensagens.resumoClientes);
-    const msgClientes = replacePlaceholders(tplCli, { X: clientesDistintos.size });
-    await addMessage(msgClientes);
-
-    // Valor total processado vs. excluído
-    const totalProcFmt = somaTotalProcessado.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-    const totalExcFmt = somaTotalExcluido.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-    let tplValP = getRandom(mensagens.resumoValores);
-    const msgValP = replacePlaceholders(tplValP, { A: totalProcFmt, B: totalExcFmt });
-    await addMessage(msgValP);
-
-    // Valor médio por transação (processadas)
-    const numProcessadas = totalLines - linhasExcluidas;
-    if (numProcessadas > 0) {
-        const mediaTransacao = somaTotalProcessado / numProcessadas;
-        const mediaFmt = mediaTransacao.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-        let tplMedia = getRandom(mensagens.resumoMedia);
-        const msgMedia = replacePlaceholders(tplMedia, { C: mediaFmt });
-        await addMessage(msgMedia);
-    }
-
-    // Ocorrências de erros no dicionário
-    if (errosDeb + errosCred > 0) {
-        let tplErro = getRandom(mensagens.resumoErros);
-        const msgErro = replacePlaceholders(tplErro, { EE: errosDeb, FF: errosCred });
-        await addMessage(msgErro);
-    }
-
-    // Tempo de execução e economia
-    const fimExecucao = Date.now();
-    const duracaoMs = fimExecucao - inicioExecucao;
-    const duracaoSeg = Math.round(duracaoMs / 1000);
-    const duracaoMin = (duracaoSeg / 60).toFixed(2);
-    const tempoManualSeg = 35 * 60;
-    const economiaSeg = Math.max(tempoManualSeg - duracaoSeg, 0);
-    const economiaMin = (economiaSeg / 60).toFixed(2);
-
-    let tplTime = getRandom(mensagens.tempoExecucao);
-    const msgTime = replacePlaceholders(tplTime, { T: duracaoSeg, U: duracaoMin });
-    await addMessage(msgTime);
-
-    let tplEco = getRandom(mensagens.economia);
-    const msgEco = replacePlaceholders(tplEco, { E: economiaSeg, F: economiaMin });
-    await addMessage(msgEco);
-
-    // Conclusão / botão de download
-    let tplFim = getRandom(mensagens.conclusao);
-    await addMessage(tplFim);
-    createDownloadLink(outputLines.join('\n'));
-}
-
-uploadButton.addEventListener('click', () => fileInput.click());
-
-fileInput.addEventListener('change', (event) => {
-    const file = event.target.files[0];
-    if (file) {
-        addMessage(`Arquivo "<b>${file.name}</b>" na mão!`, 'user');
-        uploadButton.disabled = true;
-        uploadButton.innerText = "Processando...";
-        const reader = new FileReader();
-        reader.onload = (e) => processFile(e.target.result);
-        reader.readAsText(file, 'ISO-8859-1');
-    }
-});
-
-downloadButton.addEventListener('click', () => {
-    const a = document.createElement('a');
-    a.href = finalFileContent;
-    a.download = 'ARQUIVO_PROCESSADO.txt';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-
-    downloadButton.style.display = 'none';
-    uploadButton.style.display = 'block';
-    uploadButton.innerText = "Enviar Outro Arquivo";
-    addMessage("Show! Se precisar de mais alguma coisa, é só mandar ver.");
-});
-
-(async () => {
-    showOnline();
-    const welcome = getRandom(mensagens.boasVindas);
-    await addMessage(welcome);
-})();

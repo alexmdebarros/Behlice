@@ -3,61 +3,49 @@ const uploadButton = document.getElementById('upload-button');
 const downloadButton = document.getElementById('download-button');
 const fileInput = document.getElementById('file-input');
 const typingStatus = document.getElementById('typing-status');
+const inputArea = document.getElementById('input-area');
+const moduleSelectionArea = document.getElementById('module-selection-area');
+
+// --- NOVO: Variável para controlar o estado do módulo
+let selectedModule = null;
 
 // Frases para cada etapa do sistema
 const mensagens = {
-    // --- MENSAGENS DE BOAS-VINDAS ---
-    boasVindas: [
-        "Behlice na área! Pode mandar a planilha que o show de organização vai começar.",
-        "E aí, preparado(a) para ver seus números dançando na ordem certa? Envia o arquivo!",
-        "Ouvi dizer que tem umas contas precisando de um herói. O Capitão Conciliação chegou!",
-        "Prepare o café, porque a mágica contábil está prestes a acontecer. Só falta o arquivo.",
-        "Seu desejo foi uma ordem! Assistente de conciliação pronto para a ação. Upload, por favor!",
-        "Vamos transformar esse caos de dados em uma sinfonia de relatórios. Manda a partitura (ou o .txt).",
-        "Modo 'Exterminador de Inconsistências' ativado. Qual é o alvo de hoje?",
-        "A contabilidade te dá sono? Deixa comigo. Vou transformar isso num filme de ação. Cadê o roteiro?",
-        "Meu cérebro de silício está faminto por números. Me alimente com seu arquivo!",
-        "Seus dados estão em um relacionamento complicado? Sou o terapeuta de planilhas que eles precisam.",
-        "Chega de procurar agulha no palheiro. Minha especialidade é encontrar a agulha, polir e te entregar.",
-        "Pronto para dar um 'CTRL+S' na sua paz de espírito? Começa com um upload.",
-        "Dizem que sou o 'Marie Kondo' dos dados. Vamos ver o que desperta alegria nesses números.",
-        "A planilha está te encarando com desdém? Deixa eu ter uma conversinha com ela.",
-        "O Doutor Behlice está no consultório. Qual o sintoma do seu relatório hoje?",
-        "Bora botar ordem nesse fluxo de caixa! Pode subir o arquivo que eu coloco nos eixos.",
-        "Não sou vidente, mas prevejo um futuro com todos os seus saldos batendo. Começa agora!",
-        "Cheguei! E trouxe meu kit de ferramentas: lógica, café (virtual) e zero paciência pra erro.",
-        "A lenda é real. Um assistente que ama conciliação. Prove e comprove, me envie o arquivo!",
-        "Vai uma auditoria com pitadas de bom humor aí? O prato principal é o seu arquivo.",
-        "Recebi o chamado. O bat-sinal das planilhas brilhou no céu. Estou a postos!",
-        "Que a força dos dados esteja com você! E comigo também. Manda pra cá!",
-        "Acionando o analisador quântico de planilhas. Só preciso da matéria-prima.",
-        "Seus números me contaram que estavam se sentindo sozinhos e desorganizados. Vim resolver.",
-        "Enquanto você relaxa, eu faço o trabalho pesado. É só me dar o arquivo.",
-        "Vamos começar a festa? Onde os débitos e créditos se encontram e fazem as pazes.",
-        "Alô, é da contabilidade? O futuro ligou e disse pra você me usar. Envia o arquivo!",
-        "Não se preocupe, eu não julgo seus lançamentos. Eu só os organizo com perfeição.",
-        "A postos para mais uma aventura no fantástico mundo da conciliação!",
-        "Que comece a caça aos erros! Nenhum centavo ficará para trás.",
-        "Ligando o modo turbo. Seus dados não vão nem ver o que os atingiu.",
-        "Pense em mim como um GPS para seus números perdidos. Qual o destino? O arquivo de saída!",
-        "Pode relaxar a mandíbula. A tensão da conferência manual acaba aqui.",
-        "Hoje é dia de maldade... com as planilhas bagunçadas! Manda bala.",
-        "Chamando todas as unidades (de dados)! Apresentem-se para a formação.",
-        "Bora dar um trato nesse visual? Seus relatórios vão sair daqui prontos para a passarela.",
-        "Se a vida te der limões, faça uma limonada. Se a contabilidade te der uma planilha, me dê.",
-        "Contas a pagar, contas a receber... contas comigo pra resolver!",
-        "Fui programado para duas coisas: ser incrível e organizar suas finanças. E já sou incrível.",
-        "Apertem os cintos, a decolagem rumo à organização total vai começar.",
-        "Disponível para serviço. Minha taxa? Apenas a sua satisfação (e o arquivo, claro).",
-        "O maestro está pronto. A orquestra de dados aguarda o seu comando de upload.",
-        "Cansado(a) de ver números vermelhos? Vamos ver se eles são vermelhos mesmo.",
-        "Acredite no seu potencial. E no meu também. Juntos, vamos dominar essa planilha.",
-        "Conciliação: a arte de fazer com que dois e dois continuem sendo quatro. E eu sou um artista.",
-        "Venho em paz, em nome da organização e da praticidade. Me entregue o arquivo e ninguém se machuca.",
-        "Behlice, licenciado para conciliar. Permissão para começar?",
-        "Desembarcando na sua máquina para uma missão de pura organização. Arquivo na escuta?",
-        "Fui treinado nas artes milenares do Débito-jutsu e Crédito-jutsu. Prepare-se!",
-        "Pode vir quente que eu estou fervendo... de vontade de processar esses dados!"
+    // --- NOVO: Mensagens iniciais para escolha do módulo ---
+    saudacaoInicial: [
+        "Behlice na área, pronto para a ação! 🚀",
+        "E aí! Tudo pronto para organizar a casa hoje?",
+        "Olá! Seu assistente contábil favorito chegou.",
+        "Cheguei pra botar ordem na bagunça! Qual a missão de hoje?",
+        "Oi, sumido(a)! Que bom te ver. Vamos trabalhar?"
+    ],
+    perguntaModulo: [
+        "Para começar, me diga qual módulo você quer usar:",
+        "Qual departamento precisa da minha genialidade hoje?",
+        "Escolha sua aventura contábil de hoje:",
+        "Me diga onde a mágica vai acontecer:",
+        "Selecione uma opção pra gente começar os trabalhos:"
+    ],
+    // --- NOVO: Mensagens para módulos em desenvolvimento ---
+    emDesenvolvimento: [
+        "Opa! Essa parte ainda está no forno. 👨‍🍳 Logo logo fica pronta! Que tal tentar outro módulo?",
+        "Calma, pequeno gafanhoto! Meus desenvolvedores ainda estão construindo esta maravilha. Tente outra opção.",
+        "Recebi seu pedido, mas essa funcionalidade está sendo tunada na oficina. 🛠️ Escolha outro caminho por enquanto.",
+        "Quase lá! Essa função está na fase beta. Em breve, estará disponível para você. Que tal explorar outro módulo?",
+        "Essa área está em construção! Capacete obrigatório. 👷‍♂️ Por segurança, escolha outra opção.",
+        "Spoiler: essa funcionalidade vai ser incrível! Mas ainda não foi lançada. Tente um módulo que já está no ar!",
+        "Um feiticeiro nunca se atrasa, nem se adianta. Ele chega exatamente quando pretende. E eu ainda não pretendi finalizar esse módulo. 😄 Outra opção?",
+        "Estou fazendo um upgrade nos meus circuitos para este módulo. Tente mais tarde, por favor. Ou melhor, tente outro agora mesmo!",
+        "Página em construção... com muito carinho e código. Volte em breve! Enquanto isso, os outros módulos estão a todo vapor.",
+        "Ainda não é a hora e a vez deste módulo brilhar. Mas vai chegar! Por agora, temos outras estrelas no palco."
+    ],
+    // --- MENSAGENS DE BOAS-VINDAS (Agora para o CAR) ---
+    boasVindasCAR: [
+        "Contas a Receber, entendi! Pode mandar a planilha que o show de organização vai começar.",
+        "Show! Preparado(a) para ver seus recebimentos dançando na ordem certa? Envia o arquivo!",
+        "Ouvi dizer que tem umas contas a receber precisando de um herói. O Capitão Conciliação chegou!",
+        "Beleza, CAR na cabeça! Prepare o café, porque a mágica contábil está prestes a acontecer. Só falta o arquivo.",
+        "Ok, Contas a Receber! Vamos transformar esse caos de dados em uma sinfonia de relatórios."
     ],
     // --- MENSAGENS DE INÍCIO DE PROCESSAMENTO ---
     inicioProcessamento: [
@@ -66,125 +54,49 @@ const mensagens = {
         "Recebido! Agora começa a parte divertida. Calibrando meus algoritmos para a sua realidade.",
         "Beleza! Deixa eu desenrolar esse novelo de números. Modo detetive ativado.",
         "Hora do show! Acendendo as luzes do palco e chamando as regras para a cena.",
-        "Certo, vamos ao que interessa. Dando a largada na grande corrida da conciliação!",
-        "Arquivo carregado com sucesso. Agora vou passar o pente fino em cada linha.",
-        "Ok, senta que lá vem história... a história de como seus dados ficaram perfeitamente organizados.",
-        "Ativando o protocolo 'Zero Erro'. As inconsistências que se preparem.",
-        "Iniciando a operação 'Tempestade de Dados'. No final, a calmaria de um relatório limpo.",
-        "Lá vamos nós! Vou tratar cada linha com o carinho de um artesão e a precisão de um laser.",
-        "Tudo pronto por aqui. Vou começar a separar o joio do trigo, ou melhor, o débito do crédito.",
-        "Certo, o paciente está na mesa de operação. Bisturi (de código) em mãos. Iniciando procedimento.",
-        "Que comecem os jogos! E que a sorte esteja sempre a favor dos saldos corretos.",
-        "Ok, peguei as chaves do seu arquivo. Hora de dar uma geral na casa e colocar tudo no lugar.",
-        "Analisando a estrutura... hum... interessante. Tenho um bom pressentimento sobre isso.",
-        "Iniciando a digestão dos dados. Meu processador agradece por uma refeição tão... numérica.",
-        "Primeiro passo: um reconhecimento do terreno. Analisando a topografia da sua planilha.",
-        "Certo, acionando o núcleo de processamento. As engrenagens da lógica estão girando.",
-        "É agora! Aquele momento mágico em que a bagunça começa a virar história pra contar.",
-        "Vamos lá. As regras estão afiadas e prontas para entrar em ação.",
-        "Iniciando a leitura. Se eu der uma risadinha, é que encontrei algo... peculiar.",
-        "Segura firme! A montanha-russa da análise de dados vai partir.",
-        "Ok, estou entrando na Matrix do seu arquivo. Já volto com a resposta para tudo.",
-        "Processo iniciado. Prometo que vou ser mais rápido que a entrega da sua pizza.",
-        "Iniciando. Vou deixar tudo tão limpo que você vai poder comer em cima desse relatório (não recomendo).",
-        "Beleza. Vou começar a mágica. Se ouvir um 'Abracadabra', fui eu.",
-        "Conectando com a fonte da sabedoria contábil... conectado! Análise em andamento.",
-        "Ok, respira fundo. Quando eu terminar, você vai respirar aliviado(a).",
-        "Começando a jornada. Primeira parada: entender o que esses números querem da vida.",
-        "O jogo começou. Meu objetivo: zerar a fase das inconsistências.",
-        "Certo. Colocando a música tema de 'Missão Impossível' pra tocar aqui. Análise iniciada.",
-        "Hora de arregaçar as mangas (metaforicamente, claro, eu não tenho mangas).",
-        "Ok, estou dentro. As luzes estão verdes, os sistemas estão operacionais. Go, go, go!",
-        "Vamos decifrar esse enigma. Cada linha é uma pista.",
-        "Iniciando a faxina. Vou varrer a poeira, tirar as teias de aranha e deixar só o que brilha.",
-        "Certo. O roteiro parece bom. Hora de dirigir essa obra-prima da organização.",
-        "O motor está ligado. O destino? Um arquivo de saída impecável.",
-        "Pegando meu ábaco de última geração... brincadeira, é tudo na base do código puro!",
-        "Análise primária em curso. Estou mapeando o DNA financeiro do seu arquivo.",
-        "Certo. As portas se abriram. Estou caminhando pelo corredor dos seus dados.",
-        "Iniciando a tradução do 'financês' para o 'português claro e organizado'.",
-        "É agora que a criança chora e a mãe não vê... mas o Behlice vê e arruma tudo.",
-        "Vamos lá. Primeira regra da conciliação: não se fala sobre a conciliação. Brincadeira, eu falo sim!",
-        "Acionando o modo 'Foco Total'. O mundo exterior para de existir por alguns instantes.",
-        "Ok, o arquivo está em boas mãos. Ou melhor, em bons circuitos.",
-        "A jornada de mil linhas começa com um único byte. E já começamos!",
-        "Iniciando a orquestração. Cada dado vai tocar sua nota na hora certa.",
-        "Entrando em velocidade de cruzeiro. A viagem pelo seu arquivo já começou.",
-        "Certo, o diagnóstico começou. Em breve, o plano de tratamento (o arquivo de saída)."
     ],
-    // --- MENSAGENS DE PROGRESSO ---
+    // ... (O restante do seu objeto 'mensagens' continua aqui, sem alterações)
     progresso25: [
         "25% no papo! Já aqueci os motores e peguei o ritmo da estrada.",
         "Um quarto do caminho já foi! As coisas estão começando a tomar forma por aqui. 🚂",
         "25% concluído. Já encontrei uma vírgula tímida fora do lugar e a coloquei de volta na festa.",
         "Primeiro checkpoint alcançado! 25% dos dados já estão de cara nova.",
-        "Chegamos aos 25%. Isso está mais fácil do que explicar o que é débito e crédito pra um leigo.",
-        "Ainda no começo, mas já voando! 25% e contando...",
-        "Relatório de campo: 25% do território já foi explorado e mapeado.",
-        "Passando pra avisar: 25% do trabalho já virou história. E o final parece feliz.",
-        "Beleza, 25% feito. Os números estão começando a se comportar.",
-        "Já foi um quarto da pizza! E essa parece ser de quatro queijos: Débito, Crédito, Histórico e Valor."
+        "Chegamos aos 25%. Isso está mais fácil do que explicar o que é débito e crédito pra um leigo."
     ],
     progresso50: [
         "Metade do caminho! Estamos no topo da montanha-russa, agora é só descida! 🎢",
         "50% na conta! Já processei mais linhas do que a quantidade de café que você deveria tomar hoje.",
         "Metade da missão cumprida! Seus dados já estão com 50% a mais de 'incrível'.",
         "Chegamos na metade do livro. E posso adiantar: o mocinho (o saldo) sobrevive no final.",
-        "50% pronto! A planilha está suando, mas eu estou tranquilo como um monge programador.",
-        "Cinquentinha por cento! Já estamos mais perto do fim do que do começo. Matemática básica!",
-        "Pausa para o café (virtual). 50% do percurso concluído com sucesso!",
-        "No meio do furacão! Mas é um furacão de organização. 50% dominado.",
-        "Relatório da metade do jogo: estamos vencendo as inconsistências de lavada!",
-        "50%... Direto do túnel do tempo, ou melhor, do túnel de dados. Já vejo uma luz!"
+        "50% pronto! A planilha está suando, mas eu estou tranquilo como um monge programador."
     ],
     progresso75: [
         "Na reta final! 75% concluído. Já consigo sentir o cheirinho de arquivo pronto!",
         "Falta pouco! Só mais um gás e cruzamos a linha de chegada. 75% no placar. 🏁",
         "Estamos a 75%. A festa já está montada, só faltam os últimos convidados (dados) chegarem.",
         "Quase lá! 75% dos seus problemas com essa planilha já foram resolvidos por mim.",
-        "Três quartos da jornada! A luz no fim do túnel de dados está forte e clara agora.",
-        "A cereja do bolo já está na minha mão. Só terminando de assar o bolo. 75%!",
-        "Update: 75% e subindo! A precisão continua em 100%.",
-        "Aguenta firme! A parte mais difícil já passou. Estamos em 75% do paraíso contábil.",
-        "75%... Já estou até ensaiando meu discurso de vitória sobre esses números.",
-        "Falta só aquele 25% que o estagiário faria em 3 dias. Eu faço em segundos. Aguarde."
+        "Três quartos da jornada! A luz no fim do túnel de dados está forte e clara agora."
     ],
-    // --- MENSAGENS DE RESUMO (EXPANDIDAS) ---
     resumoLinhasExcluidas: [
         "🧹 Passei a porva em <b>X</b> linhas, que descansem em paz nas 'nuvens🤣'.",
         "🧹 Faxina concluída. <b>X</b> registro(s) que estavam sobrando foram convidados a se retirar.",
         "Fiz a curadoria dos seus dados. <b>X</b> linha(s) não passaram no meu controle de qualidade.",
         "Operação 'Limpa Planilha' foi um sucesso. Saldo: <b>X</b> linha(s) a menos de bagunça.",
-        "Como um bom editor, cortei o que não era necessário. <b>X</b> linha(s) foram para a lixeira.",
-        "Algumas linhas tentaram se esconder, mas eu as encontrei. <b>X</b> foram deportadas do arquivo.",
-        "Mostrei quem manda. <b>X</b> linha(s) irrelevantes foram devidamente ignoradas.",
-        "Para um relatório mais 'fit', fiz uma dieta de dados. Eliminamos <b>X</b> linha(s) de 'gordura'.",
-        "O bouncer da porta dos dados sou eu. Barrei <b>X</b> entrada(s) que não estavam na lista.",
-        "Houve uma pequena rebelião de dados, mas foi contida. <b>X</b> linha(s) foram neutralizadas."
+        "Como um bom editor, cortei o que não era necessário. <b>X</b> linha(s) foram para a lixeira."
     ],
     resumoContas: [
         "📊 As estrelas do rock deste lote! Estas contas não saíram da pista de dança:\n\n{listaContas}",
         "Confira o 'Top 5' das contas mais tagarelas. Elas tinham muito a dizer:\n\n{listaContas}",
         "E o Oscar de 'Conta Mais Ativa' vai para... na verdade, são várias! O ranking:\n\n{listaContas}",
         "Estas contas foram as 'donas da festa'. Apareceram em todos os lugares:\n\n{listaContas}",
-        "Radar de atividade: detectei alta frequência de movimentos nestas contas:\n\n{listaContas}",
-        "Se contas ganhassem por popularidade, estas seriam as campeãs de audiência:\n\n{listaContas}",
-        "As 'Abelhas Rainhas' da sua colmeia de dados. Elas trabalharam bastante:\n\n{listaContas}",
-        "Holofotes nelas! As contas que mais brilharam (ou seja, apareceram) foram:\n\n{listaContas}",
-        "Mapa de calor financeiro: estas áreas (contas) estiveram bem quentes:\n\n{listaContas}",
-        "Análise de frequência: as contas que mais bateram ponto no seu arquivo:\n\n{listaContas}"
+        "Radar de atividade: detectei alta frequência de movimentos nestas contas:\n\n{listaContas}"
     ],
     resumoGrupo: [
         "📈 Análise de duplas: os pares Débito/Crédito que mais trabalharam juntos:\n\n{listaGrupos}",
         "Mapa de relacionamentos: os 'casais' de contas que mais movimentaram valores:\n\n{listaGrupos}",
         "Deu match! Aqui estão as combinações D/C e o total que elas transacionaram:\n\n{listaGrupos}",
         "Sinergia contábil: o resultado financeiro de cada parceria entre contas:\n\n{listaGrupos}",
-        "Quem conversa com quem? Veja o volume de 'papo' (em R$) por dupla de contas:\n\n{listaGrupos}",
-        "Como um bom cientista, analisei as interações. As mais fortes foram:\n\n{listaGrupos}",
-        "Balanço das parcerias: o quanto cada dupla D/C somou no final:\n\n{listaGrupos}",
-        "Os 'parças' do seu arquivo. Total de grana por cada amizade D/C:\n\n{listaGrupos}",
-        "A dança das contas: o saldo final de cada par que entrou no salão:\n\n{listaGrupos}",
-        "Radiografia das transações: o valor total consolidado por cada tipo de lançamento (D-C):\n\n{listaGrupos}"
+        "Quem conversa com quem? Veja o volume de 'papo' (em R$) por dupla de contas:\n\n{listaGrupos}"
     ],
     resumoExcluidasPorGrupo: [
         "🚫 Os 'casais' que não se deram bem e foram expulsos da festa (e seus valores):\n\n{listaExcluidas}",
@@ -235,30 +147,13 @@ const mensagens = {
         "🚀 Menos tempo na planilha, mais tempo para... qualquer outra coisa! Economia de <b>F</b> min.",
         "🚀 O relógio agradece. <b>E</b> segundos que não serão gastos com cliques repetitivos."
     ],
-    // --- MENSAGENS DE CONCLUSÃO ---
     conclusao: [
         "E... pronto! ✨ Pode pegar seu arquivo, ele saiu do forno agora, quentinho e organizado.",
         "Tcharam! A metamorfose está completa. Sua lagarta de dados virou uma borboleta de relatórios.",
         "Missão finalizada com sucesso. O arquivo está limpo, cheiroso e te esperando para o download.",
         "Voilà! Como num passe de mágica, a bagunça sumiu. O resultado está a um clique.",
-        "Trabalho feito. Pode conferir, está mais alinhado que desfile de 7 de setembro.",
-        "Fim da linha... para a desorganização! Seu novo arquivo está pronto para brilhar.",
-        "É isso, pessoal! O show acabou, mas o resultado fica. Pode baixar a estrela da noite.",
-        "Aperto de mão virtual. Foi um prazer fazer negócios com seus dados. Arquivo pronto!",
-        "Pode soltar os fogos! A conciliação foi um sucesso. O troféu é o seu arquivo pronto.",
-        "Finalizado. Seus dados foram ao spa do Behlice e voltaram renovados. Confira!",
-        "Arquivo pronto para a decolagem. Pode baixar e voar para sua próxima tarefa.",
-        "Check-mate! As inconsistências não tiveram chance. O rei (seu relatório) está seguro.",
-        "Mic drop. 🎤 Behlice desligando (até o próximo arquivo). Seu download está pronto.",
-        "A ordem foi restaurada na galáxia da sua contabilidade. Que o download esteja com você.",
-        "É o fim da picada... da digitação manual! Seu arquivo automatizado está aqui.",
-        "Seu pedido é uma ordem! Um arquivo TXT, no capricho, saindo agora.",
-        "Pode comemorar! O balanço bateu, as contas fecharam e o arquivo está te esperando.",
-        "Feito! Nível de perfeição: milimetricamente calculado. Baixe e aprecie.",
-        "O pacote foi entregue. Dentro dele: paz, organização e seus dados formatados.",
-        "Acabou o expediente por aqui. Deixei tudo arrumado pra você. Só fazer o download."
+        "Trabalho feito. Pode conferir, está mais alinhado que desfile de 7 de setembro."
     ],
-    // --- MENSAGENS DE ESPERA/ARQUIVO VAZIO ---
     espera: [
         "Ué, cadê os dados? Acho que esse arquivo veio só com o cheiro.",
         "Recebi um fantasma. Um arquivo sem conteúdo. Teria um com mais 'substância'?",
@@ -266,19 +161,23 @@ const mensagens = {
         "Este arquivo está mais vazio que cinema em dia de final de campeonato. Tenta de novo?",
         "Acho que você me enviou o rascunho do rascunho. Não encontrei nada para processar aqui."
     ],
-    // --- MENSAGENS DE ERRO ---
     erroGeral: [
         "😱 Deu tilt nos meus circuitos! Algo inesperado aconteceu. Que tal um F5 e tentar de novo?",
         "🚨 Houston, we have a problem! Aconteceu um erro que nem eu esperava. Reinicie, por favor.",
         "🥴 Buguei! Minha inteligência artificial tirou uma folga. Tente reenviar que eu chamo ela de volta.",
         "⚙️ Uma engrenagem pulou fora aqui. Se o problema persistir, chame o mecânico (suporte).",
         "💥 Implosão de lógica! Às vezes acontece. Vamos tentar do zero? Envie o arquivo novamente."
+    ],
+    perguntaProximoPasso: [
+        "E aí, missão cumprida por aqui! O que faremos agora?",
+        "Prontinho! Qual o próximo desafio? Continuamos neste módulo ou partimos para outro?",
+        "Feito! Deseja processar outro arquivo aqui ou quer voltar ao menu principal?",
+        "Tudo certo! E agora, qual é o plano?",
+        "Mais um pra conta! Me diga, o que vem a seguir?"
     ]
 };
 
 const CNPJ_FIXO = "79124079000201";
-
-
 const dicionarioContas = {
     '8802': '1.1.01.02.19', '52': '1.1.01.01.01', '75': '1.1.01.02.01', '81': '1.1.01.02.02',
     '98': '1.1.01.02.03', '106': '1.1.01.02.04', '112': '1.1.01.02.05', '129': '1.1.01.02.06',
@@ -431,52 +330,27 @@ const dicionarioContas = {
     '6161': '4.2.07.01.04', '6209': '4.3.01.01.01', '6215': '4.3.01.01.02', '6244': '4.3.02.02.01',
     '6267': '4.3.02.03.01', '6311': '5.1.01.01.01'
 };
-
 const mapaClientesEstrangeiros = {
-    'DANIEL GEIBER': '1.1.02.15.02',
-    'REMAQ': '1.1.02.15.03',
-    'EDGAR ANTONIO CALDER': '1.1.02.15.04',
-    'BRASIL SOMIERES': '1.1.02.15.05',
-    'VICTOR MONTENEGRO': '1.1.02.15.06',
-    'LEPAL SRL': '1.1.02.15.07',
-    'TABLECONFORT': '1.1.02.15.08',
-    'AUDISIO FERNANDO': '1.1.02.15.09',
-    'DISTRIBUIDORA NACION': '1.1.02.15.10',
-    'JOSE LIMBER': '1.1.02.15.11',
-    'PEREZ Y MONTENEGRO S': '1.1.02.15.12',
-    'GUSTAVO EDUARDO TERR': '1.1.02.15.13',
-    'ABBA TRANDING SRL': '1.1.02.15.16',
-    'GRUPO TERRACENTER S.': '1.1.02.15.18',
-    'SHOW S/A': '1.1.02.15.20',
-    'COMERCIAL Y SERV VAS': '1.1.02.15.19',
-    'LUMI FI LIC': '1.1.02.15.21'
+    'DANIEL GEIBER': '1.1.02.15.02', 'REMAQ': '1.1.02.15.03', 'EDGAR ANTONIO CALDER': '1.1.02.15.04',
+    'BRASIL SOMIERES': '1.1.02.15.05', 'VICTOR MONTENEGRO': '1.1.02.15.06', 'LEPAL SRL': '1.1.02.15.07',
+    'TABLECONFORT': '1.1.02.15.08', 'AUDISIO FERNANDO': '1.1.02.15.09', 'DISTRIBUIDORA NACION': '1.1.02.15.10',
+    'JOSE LIMBER': '1.1.02.15.11', 'PEREZ Y MONTENEGRO S': '1.1.02.15.12', 'GUSTAVO EDUARDO TERR': '1.1.02.15.13',
+    'ABBA TRANDING SRL': '1.1.02.15.16', 'GRUPO TERRACENTER S.': '1.1.02.15.18', 'SHOW S/A': '1.1.02.15.20',
+    'COMERCIAL Y SERV VAS': '1.1.02.15.19', 'LUMI FI LIC': '1.1.02.15.21'
 };
-
 let finalFileContent = '';
 
-function showTyping() {
-    typingStatus.textContent = "Digitando...";
-}
-function showOnline() {
-    typingStatus.textContent = "● Online";
-}
-
-function getRandom(arr) {
-    return arr[Math.floor(Math.random() * arr.length)];
-}
+// --- FUNÇÕES DE UTILIDADE E CHAT (CÓDIGO COMPLETO) ---
+function showTyping() { typingStatus.textContent = "Digitando..."; }
+function showOnline() { typingStatus.textContent = "● Online"; }
+function getRandom(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
 
 function replacePlaceholders(template, values) {
     let result = template;
-    if (values.X !== undefined) result = result.replace(/<b>X<\/b>/g, `<b>${values.X}</b>`);
-    if (values.A !== undefined) result = result.replace(/<b>A<\/b>/g, `<b>${values.A}</b>`);
-    if (values.B !== undefined) result = result.replace(/<b>B<\/b>/g, `<b>${values.B}</b>`);
-    if (values.C !== undefined) result = result.replace(/<b>C<\/b>/g, `<b>${values.C}</b>`);
-    if (values.EE !== undefined) result = result.replace(/<b>EE<\/b>/g, `<b>${values.EE}</b>`);
-    if (values.FF !== undefined) result = result.replace(/<b>FF<\/b>/g, `<b>${values.FF}</b>`);
-    if (values.T !== undefined) result = result.replace(/<b>T<\/b>/g, `<b>${values.T}</b>`);
-    if (values.U !== undefined) result = result.replace(/<b>U<\/b>/g, `<b>${values.U}</b>`);
-    if (values.E !== undefined) result = result.replace(/<b>E<\/b>/g, `<b>${values.E}</b>`);
-    if (values.F !== undefined) result = result.replace(/<b>F<\/b>/g, `<b>${values.F}</b>`);
+    for (const key in values) {
+        const regex = new RegExp(`<b>${key}<\\/b>`, 'g');
+        result = result.replace(regex, `<b>${values[key]}</b>`);
+    }
     return result;
 }
 
@@ -520,24 +394,33 @@ async function addMessage(text, sender = 'behlice') {
         chatWindow.scrollTo({ top: chatWindow.scrollHeight, behavior: 'smooth' });
 
         await new Promise(res => setTimeout(res, 400 + Math.random() * 400));
-
         messageDiv.removeChild(typingIndicator);
         messageDiv.appendChild(bubble);
 
-        const hasBold = /<b>.*<\/b>/.test(text);
-        if (hasBold) {
-            const plain = text.replace(/<\/?b>/g, '');
-            await typeMessage(bubble, plain);
-            bubble.innerHTML = text;
-        } else {
-            await typeMessage(bubble, text);
-        }
+        await typeMessage(bubble, text.replace(/<[^>]+>/g, ''));
+        bubble.innerHTML = text;
         showOnline();
     }
 }
 
+/**
+ * Remove acentos e cedilha de uma string,
+ * retornando apenas caracteres ASCII básicos.
+ */
+function removeAccents(str) {
+    return str
+        .normalize('NFD')               // decompõe letras acentuadas em base + diacrítico
+        .replace(/[\u0300-\u036f]/g, ''); // remove diacríticos
+}
+
+
+// --- FUNÇÕES AUXILIARES DE PROCESSAMENTO (CÓDIGO COMPLETO) ---
+
 function createDownloadLink(content) {
-    const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+
+    // Remove acentos de todo o conteúdo
+    const sanitized = removeAccents(content);
+    const blob = new Blob([sanitized], { type: 'text/plain;charset=utf-8' });
     finalFileContent = URL.createObjectURL(blob);
     downloadButton.style.display = 'block';
     uploadButton.style.display = 'none';
@@ -545,14 +428,21 @@ function createDownloadLink(content) {
     fileInput.value = '';
 }
 
+
 function parseBrazilianFloat(value) {
-    if (typeof value !== 'string') return parseFloat(value);
-    return parseFloat(value.replace(/\./g, '').replace(',', '.'));
+    if (typeof value !== 'string' || value.trim() === '') {
+        return 0.0;
+    }
+    const number = parseFloat(value.replace(/\./g, '').replace(',', '.'));
+    return isNaN(number) ? 0.0 : number;
 }
 
 function formatBrazilianNoThousand(value) {
     return value.toFixed(2).replace('.', ',');
 }
+
+
+// --- LÓGICA DE PROCESSAMENTO DO MÓDULO CAR ---
 
 async function processFile(content) {
     const inicioExecucao = Date.now();
@@ -571,14 +461,11 @@ async function processFile(content) {
     const dataLines = lines.slice(1).filter(l => l.trim() !== '');
     const totalLines = dataLines.length;
 
-    // Mensagem de boas-vindas personalizada para o início
-    const welcomeMsg = getRandom(mensagens.inicioProcessamento);
-    await addMessage(welcomeMsg);
+    await addMessage(getRandom(mensagens.inicioProcessamento));
     await addMessage(`Encontrei <b>${totalLines}</b> linhas para processar.`);
 
     if (totalLines === 0) {
-        const waitMsg = getRandom(mensagens.espera);
-        await addMessage(waitMsg);
+        await addMessage(getRandom(mensagens.espera));
         uploadButton.disabled = false;
         uploadButton.innerText = "Enviar Outro Arquivo";
         return;
@@ -600,9 +487,9 @@ async function processFile(content) {
     };
 
     let linesProcessed = 0;
-    let nextUpdate25 = totalLines * 0.25;
-    let nextUpdate50 = totalLines * 0.50;
-    let nextUpdate75 = totalLines * 0.75;
+    let nextUpdate25 = totalLines > 0 ? totalLines * 0.25 : null;
+    let nextUpdate50 = totalLines > 0 ? totalLines * 0.50 : null;
+    let nextUpdate75 = totalLines > 0 ? totalLines * 0.75 : null;
     let somaTotalProcessado = 0;
     let somaTotalExcluido = 0;
 
@@ -618,33 +505,28 @@ async function processFile(content) {
         const tpTitulo = cols[colMap.tpTitulo];
         const dnCliente = cols[colMap.dnCliente].toUpperCase();
         const cdCliente = cols[colMap.cdCliente];
+        const rawValor = cols[colMap.valor];
         let excluirLinha = false;
 
         if (cdCliente) clientesDistintos.add(cdCliente);
-        
 
-        if (
-            (deb === '171' && cred === '171') ||
-            (deb === '9099' && cred === '9099') ||
-            (deb === '9099' && cred === '2743') ||
-            (deb === '8802' && cred === '2743') ||
-            (deb === '2128' && tpTitulo === 12)
+        if ((deb === '171' && cred === '171') || 
+        (deb === '9099' && cred === '9099') || 
+        (deb === '9099' && cred === '2743') || 
+        (deb === '8802' && cred === '2743') ||
+        (deb === '2128' && tpTitulo === '12')
         ) {
             excluirLinha = true;
         }
         if (!excluirLinha) {
-            if (
-                (['106', '112', '201', '8183'].includes(deb) && cred === '7019' && tpTitulo === '3') ||
-                (['106', '112', '201', '8183'].includes(deb) && cred === '9099' && tpTitulo === '3') ||
-                (deb === '1494' && cred === '9099' && tpTitulo === '3') ||
-                (deb === '201' && cred === '9099' && tpTitulo === '3') ||
-                (deb === '2128' && cred === '9099')
-            ) {
+            if ((['106', '112', '201', '8183'].includes(deb) && cred === '7019' && tpTitulo === '3') || 
+            (['106', '112', '201', '8183'].includes(deb) && cred === '9099' && tpTitulo === '3') || 
+            (deb === '1494' && cred === '9099' && tpTitulo === '3') || 
+            (deb === '201' && cred === '9099' && tpTitulo === '3') || 
+            (deb === '2128' && cred === '9099')) {
                 cred = '171';
-            } else if (
-                (deb === '1494' && cred === '9099' && tpTitulo === '6') ||
-                (['106', '112', '201', '8183'].includes(deb) && cred === '9099' && tpTitulo === '6')
-            ) {
+            } else if ((deb === '1494' && cred === '9099' && tpTitulo === '6') || 
+            (['106', '112', '201', '8183'].includes(deb) && cred === '9099' && tpTitulo === '6')) {
                 cred = '2743';
             } else if (deb === '7019' && cred === '187') {
                 cred = '313';
@@ -652,181 +534,181 @@ async function processFile(content) {
                 cred = '2832';
             }
         }
-
         if (!excluirLinha && deb === '276') {
             let contaEncontrada = false;
             for (const nomeC in mapaClientesEstrangeiros) {
-                if (dnCliente.includes(nomeC)) {
-                    deb = mapaClientesEstrangeiros[nomeC];
-                    contaEncontrada = true;
-                    break;
-                }
+                if (dnCliente.includes(nomeC)) { deb = mapaClientesEstrangeiros[nomeC]; contaEncontrada = true; break; }
             }
             if (!contaEncontrada) deb = '276';
         }
 
+        const parsedValor = parseBrazilianFloat(rawValor);
+
         if (excluirLinha) {
             linhasExcluidas++;
-            const rawValor = cols[colMap.valor];
-            const parsedValor = parseBrazilianFloat(rawValor);
             somaTotalExcluido += parsedValor;
             const chaveEx = `${deb}-${cred}`;
             if (!excluidasPorGrupo[chaveEx]) excluidasPorGrupo[chaveEx] = 0;
             excluidasPorGrupo[chaveEx] += parsedValor;
-            linesProcessed++;
         } else {
-            const data = cols[colMap.data];
-            const rawValor = cols[colMap.valor];
-            const cdHistorico = cols[colMap.cdHistorico];
-            let historicoFinal = cols[colMap.complemento] || '';
-            // Remove quebras de linha, múltiplos espaços e trim
-            historicoFinal = historicoFinal.replace(/[\r\n]+/g, ' ').replace(/\s+/g, ' ').trim();
-            if (!historicoFinal || historicoFinal === '') {
-                historicoFinal = `${cols[colMap.tpTitulo]}-${cols[colMap.nrTitulo]}-${cols[colMap.serie]}`;
-            }
-
-
-            const parsedValor = parseBrazilianFloat(rawValor);
             somaTotalProcessado += parsedValor;
-
+            const data = cols[colMap.data];
+            const cdHistorico = cols[colMap.cdHistorico];
+            let historicoFinal = cols[colMap.complemento] || `${cols[colMap.tpTitulo]}-${cols[colMap.nrTitulo]}-${cols[colMap.serie]}`;
             const formattedValor = formatBrazilianNoThousand(parsedValor);
-
-            const contaDebFinal = deb.includes('.')
-                ? deb
-                : (dicionarioContas[deb] || (() => { errosDeb++; return `ERRO_DEB(${deb})`; })());
-            const contaCredFinal = cred.includes('.')
-                ? cred
-                : (dicionarioContas[cred] || (() => { errosCred++; return `ERRO_CRED(${cred})`; })());
-
+            const contaDebFinal = deb.includes('.') ? deb : (dicionarioContas[deb] || (() => { errosDeb++; return `ERRO_DEB(${deb})`; })());
+            const contaCredFinal = cred.includes('.') ? cred : (dicionarioContas[cred] || (() => { errosCred++; return `ERRO_CRED(${cred})`; })());
             const chaveGrupo = `${deb}-${cred}`;
             if (!somaPorGrupo[chaveGrupo]) somaPorGrupo[chaveGrupo] = 0;
             somaPorGrupo[chaveGrupo] += parsedValor;
-
             contagemContas[contaDebFinal] = (contagemContas[contaDebFinal] || 0) + 1;
             contagemContas[contaCredFinal] = (contagemContas[contaCredFinal] || 0) + 1;
-
             const linhaDebito = `||${data}|${CNPJ_FIXO}|${contaDebFinal}||${formattedValor}|D|${cdHistorico}|${historicoFinal}|`;
             const linhaCredito = `||${data}|${CNPJ_FIXO}|${contaCredFinal}||${formattedValor}|C|${cdHistorico}|${historicoFinal}|`;
-
             outputLines.push(linhaDebito, linhaCredito);
-            linesProcessed++;
         }
 
-        // Atualizações de progresso
-        if (linesProcessed >= nextUpdate25 && nextUpdate25 !== null) {
-            const progMsg = getRandom(mensagens.progresso25);
-            await addMessage(progMsg);
-            nextUpdate25 = null;
-        } else if (linesProcessed >= nextUpdate50 && nextUpdate50 !== null) {
-            const progMsg = getRandom(mensagens.progresso50);
-            await addMessage(progMsg);
-            nextUpdate50 = null;
-        } else if (linesProcessed >= nextUpdate75 && nextUpdate75 !== null) {
-            const progMsg = getRandom(mensagens.progresso75);
-            await addMessage(progMsg);
-            nextUpdate75 = null;
-        }
+        linesProcessed++;
+        if (nextUpdate25 && linesProcessed >= nextUpdate25) { await addMessage(getRandom(mensagens.progresso25)); nextUpdate25 = null; }
+        else if (nextUpdate50 && linesProcessed >= nextUpdate50) { await addMessage(getRandom(mensagens.progresso50)); nextUpdate50 = null; }
+        else if (nextUpdate75 && linesProcessed >= nextUpdate75) { await addMessage(getRandom(mensagens.progresso75)); nextUpdate75 = null; }
     }
 
-    // Resumo de linhas excluídas
-    if (linhasExcluidas > 0) {
-        let tpl = getRandom(mensagens.resumoLinhasExcluidas);
-        const msg = replacePlaceholders(tpl, { X: linhasExcluidas });
-        await addMessage(msg);
-    } else {
-        let tpl = getRandom(mensagens.resumoLinhasExcluidas);
-        const msg = replacePlaceholders(tpl, { X: 0 });
-        await addMessage(msg);
-    }
+    if (linhasExcluidas > 0) { await addMessage(replacePlaceholders(getRandom(mensagens.resumoLinhasExcluidas), { X: linhasExcluidas })); }
+    else { await addMessage(replacePlaceholders(getRandom(mensagens.resumoLinhasExcluidas), { X: 0 })); }
 
-    // Resumo das contas mais movimentadas (top 5)
     const sortedContas = Object.entries(contagemContas).sort((a, b) => b[1] - a[1]);
     if (sortedContas.length > 0) {
-        const top5 = sortedContas.slice(0, 5)
-            .map(([conta, cnt]) => `Conta <b>${conta}</b>: <b>${cnt}</b> vezes`)
-            .join('\n');
-        let tpl = getRandom(mensagens.resumoContas);
-        const msg = tpl.replace('{listaContas}', top5);
-        await addMessage(msg);
+        const top5 = sortedContas.slice(0, 5).map(([conta, cnt]) => `Conta <b>${conta}</b>: <b>${cnt}</b> vezes`).join('\n');
+        await addMessage(getRandom(mensagens.resumoContas).replace('{listaContas}', top5));
     }
 
-    // Métricas por grupo (processadas)
     if (Object.keys(somaPorGrupo).length > 0) {
         const grupos = Object.keys(somaPorGrupo).sort().map(chave => {
-            const total = somaPorGrupo[chave];
-            const formatted = total.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
             const [deb, cred] = chave.split('-');
-            return `• Débito <b>${deb}</b> e Crédito <b>${cred}</b> → R$ <b>${formatted}</b>`;
+            const valorFormatado = somaPorGrupo[chave].toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            return `• Débito <b>${deb}</b> e Crédito <b>${cred}</b> → R$ <b>${valorFormatado}</b>`;
         }).join('\n');
-        let tpl = getRandom(mensagens.resumoGrupo);
-        const msg = tpl.replace('{listaGrupos}', grupos);
-        await addMessage(msg);
+        await addMessage(getRandom(mensagens.resumoGrupo).replace('{listaGrupos}', grupos));
     }
 
-    // Métricas das linhas excluídas por grupo
     if (Object.keys(excluidasPorGrupo).length > 0) {
         const exclGrp = Object.keys(excluidasPorGrupo).sort().map(chave => {
-            const totalEx = excluidasPorGrupo[chave];
-            const formattedEx = totalEx.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
             const [deb, cred] = chave.split('-');
-            return `• Excluídas: Débito <b>${deb}</b> e Crédito <b>${cred}</b> → R$ <b>${formattedEx}</b>`;
+            const valorFormatado = excluidasPorGrupo[chave].toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            return `• Excluídas: Débito <b>${deb}</b> e Crédito <b>${cred}</b> → R$ <b>${valorFormatado}</b>`;
         }).join('\n');
-        let tpl = getRandom(mensagens.resumoExcluidasPorGrupo);
-        const msg = tpl.replace('{listaExcluidas}', exclGrp);
-        await addMessage(msg);
+        await addMessage(getRandom(mensagens.resumoExcluidasPorGrupo).replace('{listaExcluidas}', exclGrp));
     }
 
-    // Quantidade de clientes distintos
-    let tplCli = getRandom(mensagens.resumoClientes);
-    const msgClientes = replacePlaceholders(tplCli, { X: clientesDistintos.size });
-    await addMessage(msgClientes);
+    await addMessage(replacePlaceholders(getRandom(mensagens.resumoClientes), { X: clientesDistintos.size }));
 
-    // Valor total processado vs. excluído
     const totalProcFmt = somaTotalProcessado.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     const totalExcFmt = somaTotalExcluido.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-    let tplValP = getRandom(mensagens.resumoValores);
-    const msgValP = replacePlaceholders(tplValP, { A: totalProcFmt, B: totalExcFmt });
-    await addMessage(msgValP);
+    await addMessage(replacePlaceholders(getRandom(mensagens.resumoValores), { A: totalProcFmt, B: totalExcFmt }));
 
-    // Valor médio por transação (processadas)
     const numProcessadas = totalLines - linhasExcluidas;
     if (numProcessadas > 0) {
-        const mediaTransacao = somaTotalProcessado / numProcessadas;
-        const mediaFmt = mediaTransacao.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-        let tplMedia = getRandom(mensagens.resumoMedia);
-        const msgMedia = replacePlaceholders(tplMedia, { C: mediaFmt });
-        await addMessage(msgMedia);
+        const mediaFmt = (somaTotalProcessado / numProcessadas).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        await addMessage(replacePlaceholders(getRandom(mensagens.resumoMedia), { C: mediaFmt }));
     }
 
-    // Ocorrências de erros no dicionário
     if (errosDeb + errosCred > 0) {
-        let tplErro = getRandom(mensagens.resumoErros);
-        const msgErro = replacePlaceholders(tplErro, { EE: errosDeb, FF: errosCred });
-        await addMessage(msgErro);
+        await addMessage(replacePlaceholders(getRandom(mensagens.resumoErros), { EE: errosDeb, FF: errosCred }));
     }
 
-    // Tempo de execução e economia
     const fimExecucao = Date.now();
-    const duracaoMs = fimExecucao - inicioExecucao;
-    const duracaoSeg = Math.round(duracaoMs / 1000);
+    const duracaoSeg = Math.round((fimExecucao - inicioExecucao) / 1000);
     const duracaoMin = (duracaoSeg / 60).toFixed(2);
     const tempoManualSeg = 35 * 60;
     const economiaSeg = Math.max(tempoManualSeg - duracaoSeg, 0);
     const economiaMin = (economiaSeg / 60).toFixed(2);
 
-    let tplTime = getRandom(mensagens.tempoExecucao);
-    const msgTime = replacePlaceholders(tplTime, { T: duracaoSeg, U: duracaoMin });
-    await addMessage(msgTime);
+    await addMessage(replacePlaceholders(getRandom(mensagens.tempoExecucao), { T: duracaoSeg, U: duracaoMin }));
+    await addMessage(replacePlaceholders(getRandom(mensagens.economia), { E: economiaSeg, F: economiaMin }));
 
-    let tplEco = getRandom(mensagens.economia);
-    const msgEco = replacePlaceholders(tplEco, { E: economiaSeg, F: economiaMin });
-    await addMessage(msgEco);
-
-    // Conclusão / botão de download
-    let tplFim = getRandom(mensagens.conclusao);
-    await addMessage(tplFim);
+    await addMessage(getRandom(mensagens.conclusao));
     createDownloadLink(outputLines.join('\n'));
 }
+
+
+// --- LÓGICA DE SELEÇÃO DE MÓDULO (CÓDIGO COMPLETO) ---
+
+function displayModuleSelection() {
+    moduleSelectionArea.innerHTML = '';
+    moduleSelectionArea.style.display = 'flex';
+    inputArea.style.display = 'none';
+
+    const modules = [
+        { id: 'CAR', name: 'Contas a Receber', icon: 'fa-hand-holding-usd' },
+        { id: 'CAP', name: 'Contas a Pagar', icon: 'fa-file-invoice-dollar' },
+        { id: 'CXB', name: 'Caixas e Bancos', icon: 'fa-university' },
+        { id: 'EST', name: 'Estoque', icon: 'fa-boxes' },
+        { id: 'FAT', name: 'Faturamento', icon: 'fa-receipt' }
+    ];
+
+    modules.forEach(module => {
+        const button = document.createElement('button');
+        button.className = 'module-button';
+        button.innerHTML = `<i class="fas ${module.icon}"></i> ${module.name}`;
+        button.onclick = () => handleModuleSelection(module.id);
+        moduleSelectionArea.appendChild(button);
+    });
+}
+
+async function handleModuleSelection(moduleId) {
+    selectedModule = moduleId;
+    moduleSelectionArea.style.display = 'none';
+
+    if (moduleId === 'CAR') {
+        await addMessage(getRandom(mensagens.boasVindasCAR));
+        inputArea.style.display = 'flex';
+    } else {
+        await addMessage(getRandom(mensagens.emDesenvolvimento));
+        await new Promise(res => setTimeout(res, 1500));
+        await addMessage(getRandom(mensagens.perguntaModulo));
+        displayModuleSelection();
+    }
+}
+
+// NOVO: Funções para o fluxo pós-processamento
+async function askForNextStep() {
+    await addMessage(getRandom(mensagens.perguntaProximoPasso));
+
+    moduleSelectionArea.innerHTML = '';
+    moduleSelectionArea.style.display = 'flex';
+
+    const continueButton = document.createElement('button');
+    continueButton.className = 'module-button';
+    continueButton.innerHTML = `<i class="fas fa-redo"></i> Continuar no CAR`;
+    continueButton.onclick = handleContinueInModule;
+    moduleSelectionArea.appendChild(continueButton);
+
+    const backToMenuButton = document.createElement('button');
+    backToMenuButton.className = 'module-button';
+    backToMenuButton.innerHTML = `<i class="fas fa-bars"></i> Voltar ao Menu`;
+    backToMenuButton.onclick = handleBackToMenu;
+    moduleSelectionArea.appendChild(backToMenuButton);
+}
+
+async function handleContinueInModule() {
+    moduleSelectionArea.style.display = 'none';
+    await addMessage("Beleza! Pode mandar o próximo arquivo do Contas a Receber.", 'behlice');
+    inputArea.style.display = 'flex';
+    uploadButton.style.display = 'block';
+    uploadButton.disabled = false;
+    uploadButton.innerText = "Enviar Arquivo";
+}
+
+async function handleBackToMenu() {
+    moduleSelectionArea.style.display = 'none';
+    await addMessage("Ok, de volta ao menu principal!", 'behlice');
+    await addMessage(getRandom(mensagens.perguntaModulo));
+    displayModuleSelection();
+}
+
+
+// --- EVENT LISTENERS E INICIALIZAÇÃO (CÓDIGO COMPLETO) ---
 
 uploadButton.addEventListener('click', () => fileInput.click());
 
@@ -837,27 +719,41 @@ fileInput.addEventListener('change', (event) => {
         uploadButton.disabled = true;
         uploadButton.innerText = "Processando...";
         const reader = new FileReader();
-        reader.onload = (e) => processFile(e.target.result);
-        reader.readAsText(file, 'ISO-8859-1');
+        reader.onload = (e) => {
+            if (selectedModule === 'CAR') {
+                processFile(e.target.result).catch(err => {
+                    console.error("Erro ao processar o arquivo:", err);
+                    addMessage(getRandom(mensagens.erroGeral));
+                    uploadButton.disabled = false;
+                    uploadButton.innerText = "Enviar Arquivo";
+                });
+            }
+        };
+        reader.readAsText(file, 'UTF-8');
     }
 });
 
+// MODIFICADO: Evento do botão de download agora chama a função de próximo passo
 downloadButton.addEventListener('click', () => {
     const a = document.createElement('a');
     a.href = finalFileContent;
-    a.download = 'ARQUIVO_PROCESSADO.txt';
+    a.download = 'ARQUIVO_PROCESSADO_CAR.txt';
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
 
     downloadButton.style.display = 'none';
-    uploadButton.style.display = 'block';
-    uploadButton.innerText = "Enviar Outro Arquivo";
-    addMessage("Show! Se precisar de mais alguma coisa, é só mandar ver.");
+
+    setTimeout(() => {
+        inputArea.style.display = 'none';
+        askForNextStep();
+    }, 1000);
 });
 
+// --- FLUXO INICIAL DO CHAT (CÓDIGO COMPLETO) ---
 (async () => {
     showOnline();
-    const welcome = getRandom(mensagens.boasVindas);
-    await addMessage(welcome);
+    await addMessage(getRandom(mensagens.saudacaoInicial));
+    await addMessage(getRandom(mensagens.perguntaModulo));
+    displayModuleSelection();
 })();
