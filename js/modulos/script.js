@@ -514,7 +514,7 @@ async function processFile(content) {
         (deb === '9099' && cred === '9099') || 
         (deb === '9099' && cred === '2743') || 
         (deb === '8802' && cred === '2743') ||
-        (deb === '2128' && tpTitulo === '12')
+        (deb === '2128' && tpTitulo === '12') //nova exclusao
         ) {
             excluirLinha = true;
         }
